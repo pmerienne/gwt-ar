@@ -1,0 +1,107 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.pmerienne.gwt</groupId>
+	<artifactId>gwt-ar</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>Augmented reality API for GWT</name>
+	<description>Augmented reality API for GWT</description>
+	<inceptionYear>2012</inceptionYear>
+
+	<properties>
+		<!--Trick to deploy releases (using mvn release:perform) to the local file 
+			system. The release is actually performed from target/checkout, which is 
+			why we need those ../../ . Notice that after deployment, you should commit 
+			and push to the git repository. -->
+		<altDeploymentRepository>release-repo::default::file:../../releases</altDeploymentRepository>
+
+		<!-- Compiler properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
+
+		<!-- Dependencies version -->
+		<gwt.version>2.4.0</gwt.version>
+		<mgwt.version>1.1.1</mgwt.version>
+		<junit.version>4.7</junit.version>
+	</properties>
+
+	<build>
+		<!-- Pour inclure les source et le .gwt.xml -->
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+			</resource>
+		</resources>
+
+		<plugins>
+			<!-- Compiles application -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.source}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- Plugin to release artifact -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.1</version><!--$NO-MVN-MAN-VER$ -->
+				<configuration>
+					<useReleaseProfile>false</useReleaseProfile>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+
+	<dependencies>
+		<!-- GWT dependencies -->
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- MGWT dependency -->
+		<dependency>
+			<groupId>com.googlecode.mgwt</groupId>
+			<artifactId>mgwt</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<!-- Test dependency -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>release-repo</id>
+			<url>https://pmerienne@github.com/pmerienne/gwt-ar/raw/master/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshot-repo</id>
+			<url>https://pmerienne@github.com/pmerienne/gwt-ar/raw/master/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<scm>
+		<connection>scm:git:git@github.com:pmerienne/gwt-ar.git</connection>
+		<developerConnection>scm:git:git@github.com:pmerienne/gwt-ar.git</developerConnection>
+		<url>scm:git:git@github.com:pmerienne/gwt-ar.git</url>
+	</scm>
+</project>
