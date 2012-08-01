@@ -17,7 +17,7 @@ RootPanel.get().add(arPanel);
 
 # Support
 
-gwt-ar relies on the Camera , Geolocation and Device Orientation HTML5 API. Theses API are currently supported by :
+gwt-ar relies on the Camera, Geolocation and Device Orientation HTML5 API which aren't supported by all browser. Currently gwt-ar is supported by : 
 * Chrome 21.0 +
 * Opera 12.5 +
 * Opera mobile 12.0 +
