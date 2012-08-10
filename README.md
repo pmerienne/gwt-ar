@@ -23,4 +23,4 @@ gwt-ar relies on the Camera, Geolocation and Device Orientation HTML5 API which 
 
 # Demo
 
-http://wikilocation-ar.cloudfoundry.com/ displays geolocalized information from a 2km radius around your location.
+http://wikilocation-ar.cloudfoundry.com/ displays geolocalized information from wikipedia.
