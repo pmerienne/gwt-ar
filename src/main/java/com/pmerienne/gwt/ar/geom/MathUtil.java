@@ -1,4 +1,4 @@
-package com.pmerienne.gwt.ar.math;
+package com.pmerienne.gwt.ar.geom;
 
 import static java.lang.Math.atan;
 import static java.lang.Math.atan2;
@@ -19,17 +19,43 @@ public class MathUtil {
 	 * @param deviceOrientation
 	 * @return
 	 */
-	public static Orientation getCameraOrientation(Orientation deviceOrientation) {
+	public static Orientation getCameraOrientation(Orientation deviceOrientation, Double globalOrientation) {
 		// https://developer.mozilla.org/en/DOM/Orientation_and_motion_data_explained
 		// Alpha is still the angle to the north pole
-		double alpha = deviceOrientation.alpha;
+		double alpha;
+		double beta;
+		double gamma;
+
+		alpha = 360 - deviceOrientation.alpha + globalOrientation;
+		if (globalOrientation == 0) {
+			beta = deviceOrientation.beta - 90;
+			gamma = deviceOrientation.gamma;
+		} else {
+			// Beta has an 90° angle with the handset
+			beta = deviceOrientation.gamma * Math.signum(globalOrientation) - 90;
+			gamma = deviceOrientation.beta * Math.signum(globalOrientation);
+		}
+		return new Orientation(alpha, beta, gamma);
+	}
+
+	/**
+	 * Get device orientation according to camera orientation. This orientation
+	 * is calculated for a camera situated at the back of an handset.
+	 * 
+	 * @param deviceOrientation
+	 * @return
+	 */
+	public static Orientation getDeviceOrientation(Orientation cameraOrientation) {
+		// https://developer.mozilla.org/en/DOM/Orientation_and_motion_data_explained
+		// Alpha is still the angle to the north pole
+		double alpha = cameraOrientation.alpha;
 
 		// Beta has an 90° angle with the handset
-		double beta = deviceOrientation.beta - 90;
+		double beta = cameraOrientation.beta + 90;
 
 		// Gamma is still the same angle
 		// TODO use MGWT portrait
-		double gamma = deviceOrientation.gamma;
+		double gamma = cameraOrientation.gamma;
 		return new Orientation(alpha, beta, gamma);
 	}
 

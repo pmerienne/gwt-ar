@@ -1,4 +1,4 @@
-package com.pmerienne.gwt.ar.math;
+package com.pmerienne.gwt.ar.geom;
 
 public class Point2D {
 

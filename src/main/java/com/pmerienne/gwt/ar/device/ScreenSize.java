@@ -1,6 +1,6 @@
 package com.pmerienne.gwt.ar.device;
 
-import com.pmerienne.gwt.ar.math.Point2D;
+import com.pmerienne.gwt.ar.geom.Point2D;
 
 public class ScreenSize {
 

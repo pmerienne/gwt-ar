@@ -4,9 +4,13 @@ public class ARSettings {
 
 	private final static ARSettings INSTANCE = new ARSettings();
 
-	private Integer geolocationUpdatePeriod = 500;
+	private Integer geolocationUpdatePeriod = 5000;
 
-	private Integer markerUpdatePeriod = 200;
+	private Integer markerUpdatePeriod = 100;
+
+	private Double filterThreshold = 2.0;
+
+	private Double filterStep = 1.0;
 
 	protected ARSettings() {
 		super();
@@ -30,6 +34,22 @@ public class ARSettings {
 
 	public void setMarkerUpdatePeriod(Integer markerUpdatePeriod) {
 		this.markerUpdatePeriod = markerUpdatePeriod;
+	}
+
+	public Double getFilterThreshold() {
+		return filterThreshold;
+	}
+
+	public void setFilterThreshold(Double filterThreshold) {
+		this.filterThreshold = filterThreshold;
+	}
+
+	public Double getFilterStep() {
+		return filterStep;
+	}
+
+	public void setFilterStep(Double filterStep) {
+		this.filterStep = filterStep;
 	}
 
 }

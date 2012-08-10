@@ -1,16 +1,16 @@
-package com.pmerienne.gwt.ar.math;
+package com.pmerienne.gwt.ar.geom;
 
-import static com.pmerienne.gwt.ar.math.MathUtil.getBearingAngle;
-import static com.pmerienne.gwt.ar.math.MathUtil.getInclinaisonAngle;
-import static com.pmerienne.gwt.ar.math.MathUtil.getVincentyDistance;
-import static com.pmerienne.gwt.ar.math.MathUtil.rotate;
+import static com.pmerienne.gwt.ar.geom.MathUtil.getBearingAngle;
+import static com.pmerienne.gwt.ar.geom.MathUtil.getInclinaisonAngle;
+import static com.pmerienne.gwt.ar.geom.MathUtil.getVincentyDistance;
+import static com.pmerienne.gwt.ar.geom.MathUtil.rotate;
 import static java.lang.Math.toRadians;
 
 import com.pmerienne.gwt.ar.device.FieldOfView;
 import com.pmerienne.gwt.ar.device.Location;
 import com.pmerienne.gwt.ar.device.Orientation;
 import com.pmerienne.gwt.ar.device.ScreenSize;
-import com.pmerienne.gwt.ar.marker.MarkerInformation;
+import com.pmerienne.gwt.ar.widget.marker.MarkerInformation;
 
 /**
  * <pre>

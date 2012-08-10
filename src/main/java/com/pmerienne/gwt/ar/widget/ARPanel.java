@@ -11,10 +11,10 @@ import com.pmerienne.gwt.ar.device.FieldOfView;
 import com.pmerienne.gwt.ar.device.Location;
 import com.pmerienne.gwt.ar.device.Orientation;
 import com.pmerienne.gwt.ar.device.ScreenSize;
-import com.pmerienne.gwt.ar.marker.Marker;
-import com.pmerienne.gwt.ar.marker.MarkerInformation;
-import com.pmerienne.gwt.ar.math.Point2D;
-import com.pmerienne.gwt.ar.math.ProjectionCalculator;
+import com.pmerienne.gwt.ar.geom.Point2D;
+import com.pmerienne.gwt.ar.geom.ProjectionCalculator;
+import com.pmerienne.gwt.ar.widget.marker.Marker;
+import com.pmerienne.gwt.ar.widget.marker.MarkerInformation;
 
 public class ARPanel extends AbsolutePanel {
 
@@ -52,9 +52,7 @@ public class ARPanel extends AbsolutePanel {
 	 * @param marker
 	 */
 	public void addMarker(Marker marker) {
-		this.add(marker);
 		this.markers.add(marker);
-		this.updateMarker(marker);
 	}
 
 	/**
@@ -63,9 +61,6 @@ public class ARPanel extends AbsolutePanel {
 	 * @param markers
 	 */
 	public void addMarkers(List<Marker> markers) {
-		for (Marker marker : this.markers) {
-			this.add(marker);
-		}
 		this.markers.addAll(markers);
 	}
 
@@ -75,8 +70,8 @@ public class ARPanel extends AbsolutePanel {
 	 * @param marker
 	 */
 	public void removeMarker(Marker marker) {
-		this.remove(marker);
 		this.markers.remove(marker);
+		this.remove(marker);
 	}
 
 	/**
@@ -87,6 +82,7 @@ public class ARPanel extends AbsolutePanel {
 		for (Marker marker : this.markers) {
 			this.remove(marker);
 		}
+
 		this.markers.clear();
 	}
 
@@ -123,7 +119,7 @@ public class ARPanel extends AbsolutePanel {
 	private void updateMarker(Marker marker) {
 		// Retrieve info
 		Location markerLocation = marker.getLocation();
-		Location cameraLocation = this.deviceInformationProvider.getLocation();
+		Location cameraLocation = this.deviceInformationProvider.getGeolocation();
 		Orientation cameraOrientation = this.deviceInformationProvider.getCameraOrientation();
 		FieldOfView cameraFOV = this.deviceInformationProvider.getFieldOfView();
 		ScreenSize screenSize = new ScreenSize(this.getOffsetWidth(), this.getOffsetHeight());
@@ -143,16 +139,79 @@ public class ARPanel extends AbsolutePanel {
 		// Calculate marker information
 		MarkerInformation mi = this.calculator.calculMakerInformaion(markerLocation, cameraLocation, cameraOrientation, cameraFOV, screenSize);
 
-		// Remove marker
-		this.remove(marker);
+		if (mi != null && screenSize.contains(mi.getScreenPostion())) {
+			// Update marker display
+			marker.update(mi);
 
-		if (mi != null) {
+			// Get screen position
 			Point2D screenPosition = mi.getScreenPostion();
-			marker.update(mi.getDistance());
-			if (screenSize.contains(screenPosition)) {
-				this.add(marker, screenPosition.x.intValue(), screenPosition.y.intValue());
+			Integer[] offsets = this.getMarkerOffset(marker);
+
+			if (!this.getChildren().contains(marker.asWidget())) {
+				// Add marker
+				this.add(marker, screenPosition.x.intValue() + offsets[0], screenPosition.y.intValue() + offsets[1]);
+			} else {
+				// Set widget position
+				this.setWidgetPosition(marker.asWidget(), screenPosition.x.intValue() + offsets[0], screenPosition.y.intValue() + offsets[1]);
 			}
+		} else {
+			// Remove the marker if it's not visible
+			marker.asWidget().removeFromParent();
 		}
+	}
+
+	private Integer[] getMarkerOffset(Marker marker) {
+		Integer[] offsets = new Integer[2];
+
+		// Get marker height
+		Integer markerWidth = marker.asWidget().getElement().getClientWidth();
+		Integer markerHeight = marker.asWidget().getElement().getClientHeight();
+
+		// Calcultate offsets according to marker alignment
+		switch (marker.getMarkerAlignment()) {
+		case BOTTOM_CENTER:
+			offsets[0] = - markerWidth / 2;
+			offsets[1] = - markerHeight;
+			break;
+		case BOTTOM_LEFT:
+			offsets[0] = 0;
+			offsets[1] = - markerHeight;
+			break;
+		case BOTTOM_RIGHT:
+			offsets[0] = - markerWidth;
+			offsets[1] = - markerHeight;
+			break;
+		case MIDDLE_CENTER:
+			offsets[0] = - markerWidth / 2;
+			offsets[1] = - markerHeight / 2;
+			break;
+		case MIDDLE_LEFT:
+			offsets[0] = 0;
+			offsets[1] = - markerHeight / 2;
+			break;
+		case MIDDLE_RIGHT:
+			offsets[0] = - markerWidth;
+			offsets[1] = - markerHeight / 2;
+			break;
+		case TOP_CENTER:
+			offsets[0] = - markerWidth / 2;
+			offsets[1] = 0;
+			break;
+		case TOP_LEFT:
+			offsets[0] = 0;
+			offsets[1] = 0;
+			break;
+		case TOP_RIGHT:
+			offsets[0] = - markerWidth;
+			offsets[1] = 0;
+			break;
+		default:
+			offsets[0] = - markerWidth / 2;
+			offsets[1] = - markerHeight / 2;
+			break;
+		}
+
+		return offsets;
 	}
 
 	public DeviceInformationProvider getDeviceInformationProvider() {

@@ -8,6 +8,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.pmerienne.gwt.ar.device.DeviceInformationProvider;
 
 public class CameraCapturePanel extends Composite {
 
@@ -16,14 +17,8 @@ public class CameraCapturePanel extends Composite {
 	interface CameraCapturePanelUiBinder extends UiBinder<Widget, CameraCapturePanel> {
 	}
 
-	static {
-		ensureCrossBrowser();
-	}
-
 	private final static String ACCESS_DENIED = "Unable to display camera output : access denied";
 	private final static String CAMERA_NOT_SUPPORTED = "Unable to display camera output : camera not supported by your browser";
-
-	private boolean supported = detectSupport();
 
 	@UiField
 	VideoElement videoElement;
@@ -36,7 +31,7 @@ public class CameraCapturePanel extends Composite {
 	}
 
 	public void start(boolean video, boolean audio) {
-		if (this.supported) {
+		if (DeviceInformationProvider.get().isCameraAPISupported()) {
 			this.clearError();
 			this._startVideo(video, audio);
 		} else {
@@ -54,7 +49,9 @@ public class CameraCapturePanel extends Composite {
 		};
 
 		var onStreamReady = function(stream) {
-			videoElement.src = ($wnd.URL && $wnd.URL.createObjectURL) ? $wnd.URL.createObjectURL(stream) : stream
+			videoElement.src = ($wnd.URL && $wnd.URL.createObjectURL) ? $wnd.URL
+					.createObjectURL(stream)
+					: stream
 			instance
 					.@com.pmerienne.gwt.ar.widget.CameraCapturePanel::clearError();
 		};
@@ -92,32 +89,6 @@ public class CameraCapturePanel extends Composite {
 		this.errorLabel.setVisible(true);
 		this.videoElement.getStyle().setDisplay(Display.NONE);
 		this.errorLabel.setText(CAMERA_NOT_SUPPORTED);
-	}
-
-	/**
-	 * Ensure that the window.URL and window.navigator.getUserMedia are
-	 * crossbrowser compatible.
-	 * 
-	 * This is ugly : GWT is designed to do this better with permutation!
-	 * 
-	 * @return
-	 */
-	private static native void ensureCrossBrowser() /*-{
-		$wnd.URL = $wnd.URL || $wnd.webkitURL || $wnd.msURL || $wnd.mozURL
-				|| $wnd.oURL || null;
-		$wnd.navigator.getUserMedia = $wnd.navigator.getUserMedia
-				|| $wnd.navigator.webkitGetUserMedia
-				|| $wnd.navigator.mozGetUserMedia
-				|| $wnd.navigator.msGetUserMedia
-				|| $wnd.navigator.oGetUserMedia || null;
-	}-*/;
-
-	private static native boolean detectSupport() /*-{
-		return !!$wnd.navigator.getUserMedia;
-	}-*/;
-
-	public boolean isSupported() {
-		return supported;
 	}
 
 }
