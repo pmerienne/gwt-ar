@@ -1,0 +1,6 @@
+target
+.classpath
+.gitignore.swp
+.project
+.settings/
+target/
