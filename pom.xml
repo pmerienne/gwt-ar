@@ -23,7 +23,6 @@
 
 		<!-- Dependencies version -->
 		<gwt.version>2.4.0</gwt.version>
-		<mgwt.version>1.1.1</mgwt.version>
 		<junit.version>4.7</junit.version>
 	</properties>
 
@@ -69,13 +68,6 @@
 			<artifactId>gwt-user</artifactId>
 			<version>${gwt.version}</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- MGWT dependency -->
-		<dependency>
-			<groupId>com.googlecode.mgwt</groupId>
-			<artifactId>mgwt</artifactId>
-			<version>1.1.1</version>
 		</dependency>
 
 		<!-- Test dependency -->

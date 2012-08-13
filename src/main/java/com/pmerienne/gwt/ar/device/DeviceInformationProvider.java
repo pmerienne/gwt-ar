@@ -58,12 +58,13 @@ public class DeviceInformationProvider extends EventDispatcher {
 	private native void watchOrientationChange() /*-{
 		var instance = this;
 
-		var updateGlobalOrientation = function(event) {
+		var updateGlobalOrientation = function() {
 			var orientation = $wnd.orientation ? $wnd.orientation : 0;
 			instance.@com.pmerienne.gwt.ar.device.DeviceInformationProvider::setGlobalOrientation(D)(orientation);
 		};
 
-		$wnd.addEventListener('onorientationchange', updateGlobalOrientation);
+		$wnd.addEventListener('onorientationchange', updateGlobalOrientation, false);
+		$wnd.addEventListener( 'resize', updateGlobalOrientation, false );
 	}-*/;
 
 	private native int watchGeolocation(Integer _timeout) /*-{
@@ -133,6 +134,8 @@ public class DeviceInformationProvider extends EventDispatcher {
 				|| $wnd.navigator.oGetUserMedia || null;
 		$wnd.DeviceOrientationEvent = $wnd.DeviceOrientationEvent
 				|| $wnd.OrientationEvent || null;
+		
+		$wnd.onorientationchange = $wnd.onorientationchange || $wnd.orientationchange;
 	}-*/;
 
 	private static native boolean detectGeolocationSupport() /*-{
