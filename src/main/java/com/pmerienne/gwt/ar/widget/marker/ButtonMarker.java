@@ -3,7 +3,7 @@ package com.pmerienne.gwt.ar.widget.marker;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button
+import com.google.gwt.user.client.ui.Button;
 import com.pmerienne.gwt.ar.device.Location;
 
 public class ButtonMarker extends AbstractMarker implements Marker {
