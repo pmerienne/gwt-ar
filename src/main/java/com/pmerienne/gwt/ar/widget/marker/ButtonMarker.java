@@ -17,7 +17,6 @@ public class ButtonMarker extends AbstractMarker implements Marker {
 	public ButtonMarker(String text, Location location) {
 		super(location);
 		this.button = new Button(text);
-		this.button.setSmall(true);
 	}
 
 	@Override
